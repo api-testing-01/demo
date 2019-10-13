@@ -1,15 +1,17 @@
-package org.fundacionjala.coding;
+package org.fundacionjala.coding.project;
 
 import io.restassured.response.Response;
+import org.fundacionjala.coding.RequestManager;
+import org.fundacionjala.coding.RequestSpecFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class PUTProjectTest {
+public class GETProjectTest {
 
     private String projectId;
-
+    private String WeekStartDay;
     @BeforeTest
     public void setUp() {
         //Given
@@ -21,16 +23,16 @@ public class PUTProjectTest {
     }
 
     @Test
-    public void testPUTProject() {
+    public void testGETProject() {
         //When
-        String expectedNewProjectName = "Test PUT 1";
-        Response response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
-                String.format("/projects/%s", projectId),
-                "{\"name\":\"" + expectedNewProjectName + "\"}");
+        String expectedWeekStartDay = "Monday";
+        Response response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                String.format("/projects/%s", projectId));
 
         //Then
-        String actualProjectName = response.jsonPath().getString("name");
-        Assert.assertEquals(actualProjectName, expectedNewProjectName);
+        WeekStartDay = response.jsonPath().getString("week_start_day");
+        Assert.assertEquals(WeekStartDay, expectedWeekStartDay);
+
     }
 
     @AfterTest
@@ -38,5 +40,4 @@ public class PUTProjectTest {
         RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
                 String.format("/projects/%s", projectId));
     }
-
 }
