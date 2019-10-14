@@ -33,6 +33,21 @@ public class PUTProjectTest {
         Assert.assertEquals(actualProjectName, expectedNewProjectName);
     }
 
+    @Test
+    public void testGETProject() {
+        //When
+        String expectedNewProjectName = "testGETProject";
+        RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
+                String.format("/projects/%s", projectId),
+                "{\"name\":\"" + expectedNewProjectName + "\"}");
+
+        Response response_get = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                String.format("/projects/%s", projectId));
+        //Then
+        Assert.assertEquals(response_get.getStatusCode(), 200);
+        Assert.assertEquals(response_get.jsonPath().getString("name"), expectedNewProjectName);
+    }
+
     @AfterTest
     public void cleanData() {
         RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
