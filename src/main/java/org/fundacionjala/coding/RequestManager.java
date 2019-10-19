@@ -14,7 +14,7 @@ public class RequestManager {
                 .when()
                 .body(body)
                 .post(endpoint);
-        System.out.println("POST");
+        System.out.println("***POST");
         System.out.println(response.prettyPrint());
         return response;
     }
@@ -26,7 +26,7 @@ public class RequestManager {
                 .when()
                 .body(body)
                 .put(endpoint);
-        System.out.println("PUT");
+        System.out.println("***PUT");
         System.out.println(response.prettyPrint());
         return response;
     }
@@ -35,7 +35,7 @@ public class RequestManager {
         final Response response = RestAssured.given(requestSpec)
                 .when()
                 .delete(endpoint);
-        System.out.println("DELETE");
+        System.out.println("***DELETE");
         System.out.println(response.prettyPrint());
         return response;
     }
@@ -44,7 +44,7 @@ public class RequestManager {
         final Response response = RestAssured.given(requestSpec)
                 .when()
                 .get(endpoint);
-        System.out.println("GET");
+        System.out.println("***GET");
         System.out.println(response.prettyPrint());
         return response;
     }
