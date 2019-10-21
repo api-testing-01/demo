@@ -13,7 +13,7 @@ public class StoryTest {
     public void testPUTStory() {
 
         //Given
-        String expectedProjectName = "Rest Assured new1";
+        String expectedProjectName = "Rest Assured new";
         Response response = RestAssured.given(RequestSpecFactory.getRequestSpec("pivotal"))
                 .contentType(ContentType.JSON)
                 .when()

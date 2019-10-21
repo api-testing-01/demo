@@ -8,14 +8,14 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class PUTProjectTest {
+public class GETProjectTest {
 
     private String projectId;
 
     @BeforeTest
     public void setUp() {
         //Given
-        String expectedProjectName = "Put Project Test";
+        String expectedProjectName = "Get Project Test";
         Response response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                 "/projects",
                 "{\"name\":\"" + expectedProjectName + "\"}");
@@ -23,16 +23,15 @@ public class PUTProjectTest {
     }
 
     @Test
-    public void testPUTProject() {
+    public void testGETProject() {
         //When
-        String expectedNewProjectName = "New Put Project Test";
-        Response response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
-                String.format("/projects/%s", projectId),
-                "{\"name\":\"" + expectedNewProjectName + "\"}");
+        String expectedProjectName = "Get Project Test";
+        Response response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                String.format("/projects/%s", projectId));
 
         //Then
-        String actualProjectName = response.jsonPath().getString("name");
-        Assert.assertEquals(actualProjectName, expectedNewProjectName);
+        Assert.assertEquals(response.jsonPath().getString("name"), expectedProjectName);
+        Assert.assertEquals(response.jsonPath().getString("kind"), "project");
     }
 
     @AfterTest
@@ -40,5 +39,4 @@ public class PUTProjectTest {
         RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
                 String.format("/projects/%s", projectId));
     }
-
 }
