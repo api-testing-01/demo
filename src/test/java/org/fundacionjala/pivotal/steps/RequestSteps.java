@@ -1,4 +1,4 @@
-package org.fundacionjala.coding.steps;
+package org.fundacionjala.pivotal.steps;
 
 import java.util.Map;
 
@@ -6,10 +6,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.response.Response;
-import org.fundacionjala.coding.EndpointHelper;
-import org.fundacionjala.coding.RequestManager;
-import org.fundacionjala.coding.RequestSpecFactory;
-import org.fundacionjala.coding.ScenarioContext;
+import org.fundacionjala.pivotal.EndpointHelper;
+import org.fundacionjala.pivotal.RequestManager;
+import org.fundacionjala.pivotal.RequestSpecFactory;
+import org.fundacionjala.pivotal.ScenarioContext;
 import org.testng.Assert;
 
 public class RequestSteps {

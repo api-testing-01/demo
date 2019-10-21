@@ -20,9 +20,14 @@ dependencies {
     compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.1.0'
 }
 
-test {
+task runFeatures(type: Test) {
     useTestNG()
-    testLogging {
-        events 'PASSED', 'STARTED', 'FAILED', 'SKIPPED'
+    options {
+        jvmArgs = ['-Dcucumber.options= --glue org.fundacionjala.pivotal ' +
+                           '--plugin pretty ']
     }
+    testLogging.showStandardStreams = true
+    scanForTestClasses = false
+    ignoreFailures = false
+    reports.html.enabled = false
 }

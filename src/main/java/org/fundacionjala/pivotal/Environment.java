@@ -1,4 +1,4 @@
-package org.fundacionjala.coding;
+package org.fundacionjala.pivotal;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
