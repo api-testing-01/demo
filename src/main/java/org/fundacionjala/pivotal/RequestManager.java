@@ -7,7 +7,10 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class RequestManager {
+public final class RequestManager {
+
+    private RequestManager() {
+    }
 
     public static Response post(final RequestSpecification requestSpec, final String endpoint,
                                 final String body) {
@@ -61,7 +64,7 @@ public class RequestManager {
         return getResponseWithLogger(response);
     }
 
-    private static Response getResponseWithLogger(Response response) {
+    private static Response getResponseWithLogger(final Response response) {
         response.then()
                 .log().status()
                 .log().body();
