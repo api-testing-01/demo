@@ -1,7 +1,7 @@
 Feature: Projects
 
   Scenario: PUT Project
-    Given I send a "POST" request to "/projects"
+    Given I send a "POST" request to "/projects" with data table
       | name             | Project created by cucumber |
       | public           | true                        |
       | week_start_day   | Tuesday                     |
@@ -15,5 +15,5 @@ Feature: Projects
     """
     Then I validate the response has status code 200
     And I validate the response contains "name" equals "Project updated by cucumber"
-    And I send a DELETE request to "/projects/{P.id}"
+    And I send a "DELETE" request to "/projects/{P.id}"
     And I validate the response has status code 204

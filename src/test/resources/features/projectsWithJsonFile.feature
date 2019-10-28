@@ -1,8 +1,10 @@
 Feature: Projects
 
-  Scenario: PUT Project
+  Background: Project is created
     Given I send a "POST" request to "/projects" with json file "json/requestBodyProject.json"
     And I save the response as "P"
+
+  Scenario: PUT Project
     When I send a "PUT" request to "/projects/{P.id}" with json body
     """
     {
@@ -11,5 +13,12 @@ Feature: Projects
     """
     Then I validate the response has status code 200
     And I validate the response contains "name" equals "Project updated by cucumber"
-    And I send a DELETE request to "/projects/{P.id}"
+    And I send a "DELETE" request to "/projects/{P.id}"
+    And I validate the response has status code 204
+
+  Scenario: GET Project
+    When I send a "GET" request to "/projects/{P.id}"
+    Then I validate the response has status code 200
+    And I validate the response contains "name" equals "Project created by cucumber"
+    And I send a "DELETE" request to "/projects/{P.id}"
     And I validate the response has status code 204

@@ -53,10 +53,16 @@ public class RequestSteps {
         }
     }
 
-    @Given("I send a DELETE request to {string}")
-    public void iSendARequestTo(final String endpoint) {
-        response = RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
-                EndpointHelper.buildEndpoint(context, endpoint));
+    @Given("I send a {string} request to {string}")
+    public void iSendARequestTo(final String httpMethod, final String endpoint) {
+        if ("DELETE".equalsIgnoreCase(httpMethod)) {
+            response = RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
+                    EndpointHelper.buildEndpoint(context, endpoint));
+        }
+        else {
+            response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                    EndpointHelper.buildEndpoint(context, endpoint));
+        }
     }
 
     @Then("I validate the response has status code {int}")
@@ -76,7 +82,7 @@ public class RequestSteps {
         context.set(key, response);
     }
 
-    @Given("I send a {string} request to {string}")
+    @Given("I send a {string} request to {string} with data table")
     public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
         if ("POST".equalsIgnoreCase(httpMethod)) {
             response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
