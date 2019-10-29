@@ -1,0 +1,6 @@
+{
+  "name": "Story Automation",
+  "description": "story created from a json file",
+  "story_type": "bug",
+  "current_state": "accepted"
+}
