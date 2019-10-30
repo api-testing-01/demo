@@ -1,8 +1,0 @@
-{
-  "baseUri": "https://www.pivotaltracker.com/services/v5",
-  "credentials" : {
-    "owner": {
-      "token" : ""
-    }
-  }
-}

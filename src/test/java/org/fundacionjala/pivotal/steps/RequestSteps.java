@@ -5,9 +5,7 @@ import java.util.Map;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 
@@ -19,24 +17,25 @@ import org.fundacionjala.pivotal.ScenarioContext;
 
 public class RequestSteps {
 
-    private final RequestSpecification requestSpecification;
     private Response response;
     private ScenarioContext context;
 
     public RequestSteps(final ScenarioContext context) {
         this.context = context;
-        requestSpecification = RequestSpecFactory.getRequestSpec("pivotal");
     }
 
     @Given("I send a {string} request to {string} with json body")
     public void iSendARequestToWithJsonBody(final String httpMethod, final String endpoint,
                                             final String jsonBody) {
         if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
+            response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
+        } else if ("GET".equalsIgnoreCase(httpMethod)) {
+            response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                    EndpointHelper.buildEndpoint(context, endpoint));
         } else {
-            response = RequestManager.put(requestSpecification,
+            response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         }
@@ -47,25 +46,19 @@ public class RequestSteps {
                                             final String jsonPath) {
         JSONObject jsonBody = JsonHelper.getJsonObject("src/test/resources/".concat(jsonPath));
         if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
+            response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         } else {
-            response = RequestManager.put(requestSpecification,
+            response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         }
     }
 
-    @When("I send a GET request to {string}")
-    public void iSendAGETRequestTo(final String endpoint) {
-        response = RequestManager.get(requestSpecification,
-                EndpointHelper.buildEndpoint(context, endpoint));
-    }
-
     @Given("I send a DELETE request to {string}")
     public void iSendARequestTo(final String endpoint) {
-        response = RequestManager.delete(requestSpecification,
+        response = RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
                 EndpointHelper.buildEndpoint(context, endpoint));
     }
 
@@ -89,13 +82,36 @@ public class RequestSteps {
     @Given("I send a {string} request to {string}")
     public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
         if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
+            response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     body);
         } else {
-            response = RequestManager.put(requestSpecification,
+            response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     body);
+        }
+    }
+
+    @cucumber.api.java.en.And("I validate the response contains the values equals to json file {string}")
+    public void iValidateTheResponseContainsTheValuesEqualsToJsonFile(final String jsonPath) {
+        JSONObject jsonBody = JsonHelper.getJsonObject("src/test/resources/".concat(jsonPath));
+        for (Object attribute : jsonBody.keySet()) {
+            String expectedValue = jsonBody.get(attribute).toString();
+            String actualValue = response.jsonPath().getString((String) attribute);
+            Assert.assertEquals(actualValue, expectedValue);
+        }
+
+    }
+
+    @Given("I send a {string} request with no body to {string}")
+    public void iSendARequestwithNoBodyTo(final String httpMethod, final String endpoint) {
+        if ("GET".equalsIgnoreCase(httpMethod)) {
+            response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                    EndpointHelper.buildEndpoint(context, endpoint));
+
+        } else if ("DELETE".equalsIgnoreCase(httpMethod)) {
+            response = RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
+                    EndpointHelper.buildEndpoint(context, endpoint));
         }
     }
 }

@@ -1,0 +1,16 @@
+{
+  "name": "Project created by jc1",
+  "public": true,
+  "week_start_day": "Friday",
+  "iteration_length": 2,
+  "point_scale":"0,1,2,3,5,8",
+  "bugs_and_chores_are_estimatable": true,
+  "automatic_planning": true,
+  "enable_tasks": true,
+  "start_date": "2019-10-04",
+  "description": "Project created using json file",
+  "profile_content": "Project with most amount of attributes in the request and response",
+  "enable_incoming_emails": true,
+  "project_type": "public",
+  "initial_velocity": 9
+}
