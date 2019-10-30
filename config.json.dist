@@ -2,7 +2,7 @@
   "baseUri": "https://www.pivotaltracker.com/services/v5",
   "credentials" : {
     "owner": {
-      "token" : ""
+      "token" : "f7de9d2aae2c8cdccd8e6117b9968170"
     }
   }
 }

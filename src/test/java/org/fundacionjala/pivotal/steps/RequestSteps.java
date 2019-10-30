@@ -22,6 +22,7 @@ public class RequestSteps {
     private final RequestSpecification requestSpecification;
     private Response response;
     private ScenarioContext context;
+    private String serviceName = "pivotal";
 
     public RequestSteps(final ScenarioContext context) {
         this.context = context;
@@ -97,5 +98,13 @@ public class RequestSteps {
                     EndpointHelper.buildEndpoint(context, endpoint),
                     body);
         }
+    }
+
+    // Lizzy's Practice
+
+    @When("I send a GET request to {string}")
+    public void iSendAGETRequestTo(final String endpoint) {
+        response = RequestManager.get(RequestSpecFactory.getRequestSpec(serviceName),
+                EndpointHelper.buildEndpoint(context, endpoint));
     }
 }
