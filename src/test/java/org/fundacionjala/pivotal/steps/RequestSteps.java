@@ -29,7 +29,7 @@ public class RequestSteps {
     }
 
     @Given("I use the {string} service")
-    public void iUseTheService(String serviceName) {
+    public void iUseTheService(final String serviceName) {
         requestSpecification = RequestSpecFactory.getRequestSpec(serviceName);
     }
 
