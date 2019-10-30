@@ -20,5 +20,5 @@ script:
 notifications:
   email: true
 before_install:
-- openssl aes-256-cbc -K $encrypted_8a4b7cf0a4fc_key -iv $encrypted_8a4b7cf0a4fc_iv
+- openssl aes-256-cbc -K $encrypted_28f8a2c92ae3_key -iv $encrypted_28f8a2c92ae3_iv
   -in config.json.enc -out config.json -d
