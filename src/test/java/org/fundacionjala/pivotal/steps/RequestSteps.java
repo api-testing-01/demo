@@ -9,13 +9,14 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
-import org.testng.Assert;
 
 import org.fundacionjala.pivotal.EndpointHelper;
 import org.fundacionjala.pivotal.JsonHelper;
 import org.fundacionjala.pivotal.RequestManager;
 import org.fundacionjala.pivotal.RequestSpecFactory;
 import org.fundacionjala.pivotal.ScenarioContext;
+
+import static org.testng.Assert.assertEquals;
 
 public class RequestSteps {
 
@@ -31,14 +32,25 @@ public class RequestSteps {
     @Given("I send a {string} request to {string} with json body")
     public void iSendARequestToWithJsonBody(final String httpMethod, final String endpoint,
                                             final String jsonBody) {
-        if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
-        } else {
-            response = RequestManager.put(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
+        switch (httpMethod) {
+            case "POST":
+                response = RequestManager.post(requestSpecification,
+                        EndpointHelper.buildEndpoint(context, endpoint),
+                        jsonBody);
+                break;
+            case "PUT":
+                response = RequestManager.put(requestSpecification,
+                        EndpointHelper.buildEndpoint(context, endpoint),
+                        jsonBody);
+                break;
+            case "GET":
+                response = RequestManager.get(requestSpecification,
+                        EndpointHelper.buildEndpoint(context, endpoint)
+                );
+                break;
+            default:
+                response = null;
+                break;
         }
     }
 
@@ -72,13 +84,19 @@ public class RequestSteps {
     @Then("I validate the response has status code {int}")
     public void iValidateTheResponseHasStatusCode(int expectedStatusCode) {
         int statusCode = response.getStatusCode();
-        Assert.assertEquals(statusCode, expectedStatusCode);
+        assertEquals(statusCode, expectedStatusCode);
     }
 
     @And("I validate the response contains {string} equals {string}")
     public void iValidateTheResponseContainsEquals(final String attribute, final String expectedValue) {
-        String actualProjectName = response.jsonPath().getString(attribute);
-        Assert.assertEquals(actualProjectName, expectedValue);
+        String value = response.jsonPath().getString(attribute);
+
+        if (value.contains("[")) {
+            String actualValue = response.jsonPath().getList(attribute, String.class).get(0);
+            assertEquals(actualValue, expectedValue);
+        } else {
+            assertEquals(value, expectedValue);
+        }
     }
 
     @And("I save the response as {string}")
