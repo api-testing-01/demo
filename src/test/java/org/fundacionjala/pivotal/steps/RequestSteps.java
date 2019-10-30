@@ -1,7 +1,5 @@
 package org.fundacionjala.pivotal.steps;
 
-import java.util.Map;
-
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -16,6 +14,14 @@ import org.fundacionjala.pivotal.JsonHelper;
 import org.fundacionjala.pivotal.RequestManager;
 import org.fundacionjala.pivotal.RequestSpecFactory;
 import org.fundacionjala.pivotal.ScenarioContext;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.fundacionjala.pivotal.AppConstants.STATUS_CODE_OK;
+import static org.fundacionjala.pivotal.AppConstants.PROJECTS_BASE_ENDPOINT;
 
 public class RequestSteps {
 
@@ -97,5 +103,27 @@ public class RequestSteps {
                     EndpointHelper.buildEndpoint(context, endpoint),
                     body);
         }
+    }
+
+    @Given("I had the following {string} of {string}:")
+    public void iHadTheFollowingOfStories(final String key, final String endPoint, final List<String> storyNames) {
+        String finalEndPoint = PROJECTS_BASE_ENDPOINT.concat(endPoint);
+        storyNames.forEach(name -> {
+            Map<String, String> body = new HashMap<>();
+            body.put(key, name);
+            response = RequestManager.post(requestSpecification,
+                    EndpointHelper.buildEndpoint(context, finalEndPoint),
+                    body);
+            iValidateTheResponseHasStatusCode(STATUS_CODE_OK);
+        });
+    }
+
+    @And("I validate the response contains {string}:")
+    public void iValidateTheResponseContains(final String attribute, final List<String> storyNames) {
+        String[] actualProjectNames = response.jsonPath().getList(attribute, String.class).toArray(new String[0]);
+        String[] expectedProjectNames = storyNames.toArray(new String[0]);
+        Arrays.sort(actualProjectNames);
+        Arrays.sort(expectedProjectNames);
+        Assert.assertEquals(expectedProjectNames, actualProjectNames);
     }
 }
