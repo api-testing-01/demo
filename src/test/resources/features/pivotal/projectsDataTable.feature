@@ -1,7 +1,12 @@
 Feature: Projects
 
   Scenario: PUT Project
-    Given I send a "POST" request to "/projects" with json file "json/requestBodyProject.json"
+    Given I use the "pivotal" service
+    Given I send a "POST" request to "/projects"
+      | name             | Project created by cucumber |
+      | public           | true                        |
+      | week_start_day   | Tuesday                     |
+      | iteration_length | 2                           |
     And I save the response as "P"
     When I send a "PUT" request to "/projects/{P.id}" with json body
     """

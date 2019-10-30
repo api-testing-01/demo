@@ -19,13 +19,18 @@ import org.fundacionjala.pivotal.ScenarioContext;
 
 public class RequestSteps {
 
-    private final RequestSpecification requestSpecification;
+    private RequestSpecification requestSpecification;
     private Response response;
     private ScenarioContext context;
 
     public RequestSteps(final ScenarioContext context) {
         this.context = context;
-        requestSpecification = RequestSpecFactory.getRequestSpec("pivotal");
+
+    }
+
+    @Given("I use the {string} service")
+    public void iUseTheService(String serviceName) {
+        requestSpecification = RequestSpecFactory.getRequestSpec(serviceName);
     }
 
     @Given("I send a {string} request to {string} with json body")
@@ -35,8 +40,12 @@ public class RequestSteps {
             response = RequestManager.post(requestSpecification,
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
-        } else {
+        } else if ("PUT".equalsIgnoreCase(httpMethod)) {
             response = RequestManager.put(requestSpecification,
+                    EndpointHelper.buildEndpoint(context, endpoint),
+                    jsonBody);
+        } else {
+            response = RequestManager.patch(requestSpecification,
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         }

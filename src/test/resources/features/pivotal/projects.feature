@@ -1,6 +1,7 @@
 Feature: Projects
 
   Scenario: PUT Project
+    Given I use the "pivotal" service
     Given I send a "POST" request to "/projects" with json body
     """
     {

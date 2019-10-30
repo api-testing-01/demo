@@ -1,7 +1,8 @@
 Feature: Comments
 
   Scenario: PUT comment
-    Given I send a "POST" request to "/projects" with json body
+    Given I use the "pivotal" service
+    And I send a "POST" request to "/projects" with json body
     """
     {
     "name": "Project created by cucumber"

@@ -41,6 +41,17 @@ public final class RequestManager {
         return getResponseWithLogger(response);
     }
 
+
+    public static Response patch(final RequestSpecification requestSpec, final String endpoint,
+                               final String body) {
+        final Response response = RestAssured.given(requestSpec)
+                .contentType(ContentType.JSON)
+                .when()
+                .body(body)
+                .patch(endpoint);
+        return getResponseWithLogger(response);
+    }
+
     public static Response put(final RequestSpecification requestSpec, final String endpoint,
                                final Map<String, String> body) {
         final Response response = RestAssured.given(requestSpec)
