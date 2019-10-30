@@ -5,9 +5,7 @@ import java.util.Map;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 
@@ -19,24 +17,22 @@ import org.fundacionjala.pivotal.ScenarioContext;
 
 public class RequestSteps {
 
-    private final RequestSpecification requestSpecification;
     private Response response;
     private ScenarioContext context;
 
     public RequestSteps(final ScenarioContext context) {
         this.context = context;
-        requestSpecification = RequestSpecFactory.getRequestSpec("pivotal");
     }
 
-    @Given("I send a {string} request to {string} with json body")
+    @Given("I send a {string} request to {string}")
     public void iSendARequestToWithJsonBody(final String httpMethod, final String endpoint,
                                             final String jsonBody) {
         if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
+            response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         } else {
-            response = RequestManager.put(requestSpecification,
+            response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         }
@@ -47,25 +43,19 @@ public class RequestSteps {
                                             final String jsonPath) {
         JSONObject jsonBody = JsonHelper.getJsonObject("src/test/resources/".concat(jsonPath));
         if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
+            response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         } else {
-            response = RequestManager.put(requestSpecification,
+            response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     jsonBody);
         }
     }
 
-    @When("I send a GET request to {string}")
-    public void iSendAGETRequestTo(final String endpoint) {
-        response = RequestManager.get(requestSpecification,
-                EndpointHelper.buildEndpoint(context, endpoint));
-    }
-
     @Given("I send a DELETE request to {string}")
     public void iSendARequestTo(final String endpoint) {
-        response = RequestManager.delete(requestSpecification,
+        response = RequestManager.delete(RequestSpecFactory.getRequestSpec("pivotal"),
                 EndpointHelper.buildEndpoint(context, endpoint));
     }
 
@@ -89,13 +79,21 @@ public class RequestSteps {
     @Given("I send a {string} request to {string}")
     public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
         if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
+            response = RequestManager.post(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     body);
         } else {
-            response = RequestManager.put(requestSpecification,
+            response = RequestManager.put(RequestSpecFactory.getRequestSpec("pivotal"),
                     EndpointHelper.buildEndpoint(context, endpoint),
                     body);
         }
+    }
+
+    @And("I validate the component {int} from {string} equals {string}")
+    public void iValidateTheZoneFromEquals(final int component, final String attribute, final String expectedValue) {
+        String string = response.jsonPath().getString(attribute);
+        String[] extractZone = string.split("[\\\\.$|,|;|:]");
+        String actualProjectName = extractZone[component];
+        Assert.assertEquals(actualProjectName, expectedValue);
     }
 }
