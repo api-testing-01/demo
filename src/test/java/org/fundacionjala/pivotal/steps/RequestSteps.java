@@ -25,12 +25,11 @@ public class RequestSteps {
 
     public RequestSteps(final ScenarioContext context) {
         this.context = context;
-
     }
 
-    @Given("I use the {string} service")
-    public void iUseTheService(final String serviceName) {
-        requestSpecification = RequestSpecFactory.getRequestSpec(serviceName);
+    @Given("I use the {string} service and the {string} account")
+    public void iUseTheService(final String serviceName, final String accountName) {
+        requestSpecification = RequestSpecFactory.getRequestSpec(serviceName, accountName);
     }
 
     @Given("I send a {string} request to {string} with json body")

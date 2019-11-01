@@ -1,14 +1,16 @@
 Feature: Accounts
 
-  Scenario: PATCH Accounts
-    Given I use the "sfdc" service
-    Given I send a "POST" request to "/sobjects/Account" with json body
+  Background:
+    Given I use the "sfdc" service and the "admin" account
+    And I send a "POST" request to "/sobjects/Account" with json body
     """
     {
     "Name": "Account0002 created by cucumber"
     }
     """
     And I save the response as "P"
+
+  Scenario: PATCH Accounts
     When I send a "PATCH" request to "/sobjects/Account/{P.id}" with json body
     """
     {

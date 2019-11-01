@@ -1,8 +1,8 @@
 Feature: Stories
 
-  Scenario: PUT Story
-    Given I use the "pivotal" service
-    Given I send a "POST" request to "/projects" with json body
+  Background:
+    Given I use the "pivotal" service and the "owner" account
+    And I send a "POST" request to "/projects" with json body
     """
     {
     "name": "Project created by cucumber"
@@ -16,6 +16,8 @@ Feature: Stories
     }
     """
     And I save the response as "S"
+
+  Scenario: PUT Story
     When I send a "PUT" request to "/projects/{P.id}/stories/{S.id}" with json body
     """
     {

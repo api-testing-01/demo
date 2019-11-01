@@ -11,20 +11,15 @@ import io.restassured.specification.RequestSpecification;
 
 public final class RequestSpecFactory {
 
-    private static final Map<String, Supplier<RequestSpecification>> REQUEST_SPEC_MAP = new HashMap<>();
-    static {
-        REQUEST_SPEC_MAP.put("pivotal", RequestSpecFactory::getRequestSpecPivotal);
-        REQUEST_SPEC_MAP.put("trello", RequestSpecFactory::getRequestSpecTrello);
-        REQUEST_SPEC_MAP.put("sfdc", RequestSpecFactory::getRequestSpecSFDC);
-    }
+    private static final Environment ENV = Environment.getInstance();
 
     private RequestSpecFactory() {
     }
 
-    private static RequestSpecification getRequestSpecPivotal() {
+    private static RequestSpecification getRequestSpecPivotal(final String account) {
         RequestSpecification requestSpecification = new RequestSpecBuilder()
-                .setBaseUri(Environment.getInstance().getValue("pivotal.baseUri"))
-                .addHeader("X-TrackerToken", Environment.getInstance().getValue("pivotal.credentials.owner.token"))
+                .setBaseUri(ENV.getValue("pivotal.baseUri"))
+                .addHeader("X-TrackerToken", ENV.getValue(String.format("pivotal.credentials.%s.token", account)))
                 .build();
         return requestSpecification
                 .log().method()
@@ -33,11 +28,11 @@ public final class RequestSpecFactory {
                 .log().body();
     }
 
-    private static RequestSpecification getRequestSpecTrello() {
+    private static RequestSpecification getRequestSpecTrello(final String account) {
         RequestSpecification requestSpecification = new RequestSpecBuilder()
-                .setBaseUri(Environment.getInstance().getValue("trello.baseUri"))
-                .addQueryParam("key", Environment.getInstance().getValue("trello.credentials.owner.key"))
-                .addQueryParam("token", Environment.getInstance().getValue("trello.credentials.owner.token"))
+                .setBaseUri(ENV.getValue("trello.baseUri"))
+                .addQueryParam("key", ENV.getValue(String.format("trello.credentials.%s.key", account)))
+                .addQueryParam("token", ENV.getValue(String.format("trello.credentials.%s.token", account)))
                 .build();
         return requestSpecification
                 .log().method()
@@ -46,14 +41,14 @@ public final class RequestSpecFactory {
                 .log().body();
     }
 
-    private static RequestSpecification getRequestSpecSFDC() {
+    private static RequestSpecification getRequestSpecSFDC(final String account) {
         Response response = RestAssured.given()
                 .param("grant_type", "password")
-                .param("client_id", Environment.getInstance().getValue("sfdc.credentials.admin.clientId"))
-                .param("client_secret", Environment.getInstance().getValue("sfdc.credentials.admin.clientSecret"))
-                .param("username", Environment.getInstance().getValue("sfdc.credentials.admin.userName"))
-                .param("password", Environment.getInstance().getValue("sfdc.credentials.admin.password")
-                        .concat(Environment.getInstance().getValue("sfdc.credentials.admin.securityToken")))
+                .param("client_id", ENV.getValue(String.format("sfdc.credentials.%s.clientId", account)))
+                .param("client_secret", ENV.getValue(String.format("sfdc.credentials.%s.clientSecret", account)))
+                .param("username", ENV.getValue(String.format("sfdc.credentials.%s.userName", account)))
+                .param("password", ENV.getValue(String.format("sfdc.credentials.%s.password", account))
+                        .concat(ENV.getValue(String.format("sfdc.credentials.%s.securityToken", account))))
                 .when()
                 .post("https://login.salesforce.com/services/oauth2/token");
 
@@ -68,8 +63,16 @@ public final class RequestSpecFactory {
                 .log().body();
     }
 
-    public static RequestSpecification getRequestSpec(final String serviceName) {
-        return REQUEST_SPEC_MAP.get(serviceName).get();
+    private static Map<String, Supplier<RequestSpecification>> getRequestSpecMap(final String account) {
+    Map<String, Supplier<RequestSpecification>> requestSpecMap = new HashMap<>();
+        requestSpecMap.put("pivotal", () -> getRequestSpecPivotal(account));
+        requestSpecMap.put("trello", () -> getRequestSpecTrello(account));
+        requestSpecMap.put("sfdc", () -> getRequestSpecSFDC(account));
+        return requestSpecMap;
+    }
+
+    public static RequestSpecification getRequestSpec(final String serviceName, final String account) {
+        return getRequestSpecMap(account).get(serviceName).get();
     }
 
 }
