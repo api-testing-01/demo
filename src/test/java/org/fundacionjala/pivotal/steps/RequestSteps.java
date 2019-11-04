@@ -77,6 +77,12 @@ public class RequestSteps {
                 EndpointHelper.buildEndpoint(context, endpoint));
     }
 
+    @Given("I send a GET request to {string}")
+    public void iSendGetRequestTo(final String endpoint) {
+        response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                EndpointHelper.buildEndpoint(context, endpoint));
+    }
+
     @Then("I validate the response has status code {int}")
     public void iValidateTheResponseHasStatusCode(int expectedStatusCode) {
         int statusCode = response.getStatusCode();
