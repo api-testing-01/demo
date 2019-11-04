@@ -26,5 +26,5 @@ Feature: Stories
     """
     Then I validate the response has status code 200
     And I validate the response contains "name" equals "Story updated by cucumber"
-    And I send a DELETE request to "/projects/{P.id}"
+    And I send a "DELETE" request to "/projects/{P.id}"
     And I validate the response has status code 204

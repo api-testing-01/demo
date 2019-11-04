@@ -30,50 +30,33 @@ public class RequestSteps {
     @Given("I use the {string} service and the {string} account")
     public void iUseTheService(final String serviceName, final String accountName) {
         requestSpecification = RequestSpecFactory.getRequestSpec(serviceName, accountName);
+        context.set("REQUEST_SPEC", requestSpecification);
     }
 
     @Given("I send a {string} request to {string} with json body")
     public void iSendARequestToWithJsonBody(final String httpMethod, final String endpoint,
                                             final String jsonBody) {
-        if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
-        } else if ("PUT".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.put(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
-        } else {
-            response = RequestManager.patch(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
-        }
+        response = RequestManager.doRequest(httpMethod, requestSpecification,
+                EndpointHelper.buildEndpoint(context, endpoint), jsonBody);
     }
 
     @Given("I send a {string} request to {string} with json file {string}")
     public void iSendARequestToWithJsonFile(final String httpMethod, final String endpoint,
                                             final String jsonPath) {
         JSONObject jsonBody = JsonHelper.getJsonObject("src/test/resources/".concat(jsonPath));
-        if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
-        } else {
-            response = RequestManager.put(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    jsonBody);
-        }
+        response = RequestManager.doRequest(httpMethod, requestSpecification,
+                EndpointHelper.buildEndpoint(context, endpoint), jsonBody.toJSONString());
     }
 
-    @When("I send a GET request to {string}")
-    public void iSendAGETRequestTo(final String endpoint) {
-        response = RequestManager.get(requestSpecification,
-                EndpointHelper.buildEndpoint(context, endpoint));
+    @Given("I send a {string} request to {string} with datatable")
+    public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
+        response = RequestManager.doRequest(httpMethod, requestSpecification,
+                EndpointHelper.buildEndpoint(context, endpoint), body);
     }
 
-    @Given("I send a DELETE request to {string}")
-    public void iSendARequestTo(final String endpoint) {
-        response = RequestManager.delete(requestSpecification,
+    @When("I send a {string} request to {string}")
+    public void iSendARequestTo(final String httpMethod, final String endpoint) {
+        response = RequestManager.doRequest(httpMethod, requestSpecification,
                 EndpointHelper.buildEndpoint(context, endpoint));
     }
 
@@ -92,18 +75,5 @@ public class RequestSteps {
     @And("I save the response as {string}")
     public void iSaveTheResponseAs(final String key) {
         context.set(key, response);
-    }
-
-    @Given("I send a {string} request to {string}")
-    public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
-        if ("POST".equalsIgnoreCase(httpMethod)) {
-            response = RequestManager.post(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    body);
-        } else {
-            response = RequestManager.put(requestSpecification,
-                    EndpointHelper.buildEndpoint(context, endpoint),
-                    body);
-        }
     }
 }

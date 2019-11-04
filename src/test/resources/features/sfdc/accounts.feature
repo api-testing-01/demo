@@ -18,5 +18,5 @@ Feature: Accounts
     }
     """
     Then I validate the response has status code 204
-    And I send a DELETE request to "/sobjects/Account/{P.id}"
+    And I send a "DELETE" request to "/sobjects/Account/{P.id}"
     And I validate the response has status code 204
