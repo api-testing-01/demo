@@ -5,10 +5,12 @@ Feature: Comments
     And I send a "POST" request to "/projects" with json body
     """
     {
-    "name": "Project created by cucumber"
+    "name": "Project created by cucumber {RANDOM}",
+    "new_account_name": "New Account"
     }
     """
     And I save the response as "P"
+    And I save the request endpoint for deleting
     And I send a "POST" request to "/projects/{P.id}/stories" with json body
     """
     {
@@ -24,6 +26,7 @@ Feature: Comments
     """
     And I save the response as "C"
 
+  @cleanData
   Scenario: PUT comment
     When I send a "PUT" request to "/projects/{P.id}/stories/{S.id}/comments/{C.id}" with json body
     """
@@ -33,5 +36,3 @@ Feature: Comments
     """
     Then I validate the response has status code 200
     And I validate the response contains "text" equals "Comment updated by cucumber"
-    And I send a "DELETE" request to "/projects/{P.id}"
-    And I validate the response has status code 204

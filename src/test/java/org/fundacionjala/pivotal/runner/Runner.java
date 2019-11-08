@@ -8,19 +8,29 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
 
-import org.fundacionjala.pivotal.RequestManager;
+import org.fundacionjala.core.api.RequestManager;
 import org.fundacionjala.pivotal.RequestSpecFactory;
 
 @CucumberOptions(
-        glue = {"org.fundacionjala.pivotal"},
+        glue = {"org.fundacionjala"},
         features = "src/test/resources/features",
         plugin = "pretty"
 )
 public class Runner extends AbstractTestNGCucumberTests {
 
+    @Override
+    @DataProvider(parallel = true)
+    public Object[][] scenarios() {
+        return super.scenarios();
+    }
+
     @BeforeTest
     public void beforeAllScenarios() {
+
+        System.setProperty("dataproviderthreadcount", "5");
+
         // clean data
         RequestSpecification requestSpec = RequestSpecFactory.getRequestSpec("pivotal", "owner");
         Response response = RequestManager.get(requestSpec, "/projects");

@@ -1,4 +1,4 @@
-package org.fundacionjala.pivotal;
+package org.fundacionjala.core.api;
 
 import java.util.Map;
 

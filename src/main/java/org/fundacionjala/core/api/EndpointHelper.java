@@ -1,9 +1,11 @@
-package org.fundacionjala.pivotal;
+package org.fundacionjala.core.api;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.restassured.response.Response;
+
+import org.fundacionjala.core.ScenarioContext;
 
 public final class EndpointHelper {
 

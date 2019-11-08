@@ -1,4 +1,4 @@
-package org.fundacionjala.pivotal;
+package org.fundacionjala.core;
 
 import java.io.FileInputStream;
 import java.io.IOException;
