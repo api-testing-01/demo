@@ -13,7 +13,7 @@ import org.testng.Assert;
 
 import org.fundacionjala.core.JsonHelper;
 import org.fundacionjala.core.ScenarioContext;
-import org.fundacionjala.core.api.EndpointHelper;
+import org.fundacionjala.core.api.DynamicIdHelper;
 import org.fundacionjala.core.api.RequestManager;
 
 public class RequestSteps {
@@ -29,8 +29,9 @@ public class RequestSteps {
     public void iSendARequestToWithJsonBody(final String httpMethod, final String endpoint,
                                             final String jsonBody) {
         RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
-        String builtEndpoint = EndpointHelper.buildEndpoint(context, endpoint);
-        response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint, jsonBody);
+        String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
+        response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint,
+                DynamicIdHelper.replaceIds(context, jsonBody));
         context.set("LAST_ENDPOINT", builtEndpoint);
         context.set("LAST_RESPONSE", response);
     }
@@ -40,9 +41,9 @@ public class RequestSteps {
                                             final String jsonPath) {
         RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
         JSONObject jsonBody = JsonHelper.getJsonObject("src/test/resources/".concat(jsonPath));
-        String builtEndpoint = EndpointHelper.buildEndpoint(context, endpoint);
+        String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
         response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint,
-                jsonBody.toJSONString());
+                DynamicIdHelper.replaceIds(context, jsonBody.toJSONString()));
         context.set("LAST_ENDPOINT", builtEndpoint);
         context.set("LAST_RESPONSE", response);
     }
@@ -50,7 +51,7 @@ public class RequestSteps {
     @Given("I send a {string} request to {string} with datatable")
     public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
         RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
-        String builtEndpoint = EndpointHelper.buildEndpoint(context, endpoint);
+        String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
         response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint, body);
         context.set("LAST_ENDPOINT", builtEndpoint);
         context.set("LAST_RESPONSE", response);
@@ -59,7 +60,7 @@ public class RequestSteps {
     @When("I send a {string} request to {string}")
     public void iSendARequestTo(final String httpMethod, final String endpoint) {
         RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
-        String builtEndpoint = EndpointHelper.buildEndpoint(context, endpoint);
+        String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
         response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint);
         context.set("LAST_ENDPOINT", builtEndpoint);
         context.set("LAST_RESPONSE", response);
@@ -88,5 +89,15 @@ public class RequestSteps {
         String lastResponseId = ((Response) context.get("LAST_RESPONSE")).jsonPath().getString("id");
         String finalEndpoint = String.format("%s/%s", lastEndpoint, lastResponseId);
         context.addEndpoint(finalEndpoint);
+    }
+
+    @And("I validate the response contains:")
+    public void iValidateTheResponseContains(final Map<String, String> validationMap) {
+        Map<String, Object> responseMap = response.jsonPath().getMap(".");
+        for (Map.Entry<String, String> data: validationMap.entrySet()) {
+            if (responseMap.containsKey(data.getKey())) {
+                Assert.assertEquals(String.valueOf(responseMap.get(data.getKey())), data.getValue());
+            }
+        }
     }
 }

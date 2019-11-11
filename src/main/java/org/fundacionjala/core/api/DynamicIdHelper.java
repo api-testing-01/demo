@@ -7,9 +7,9 @@ import io.restassured.response.Response;
 
 import org.fundacionjala.core.ScenarioContext;
 
-public final class EndpointHelper {
+public final class DynamicIdHelper {
 
-    private EndpointHelper() {
+    private DynamicIdHelper() {
     }
 
     public static String buildEndpoint(final ScenarioContext context, final String endPoint) {
@@ -28,6 +28,20 @@ public final class EndpointHelper {
         String[] elementSplit = element.split("\\.");
         Response response = (Response) context.get(elementSplit[0]);
         return response.jsonPath().getString(elementSplit[1]);
+    }
+
+    public static String replaceIds(final ScenarioContext context, final String body) {
+        if (!body.contains("(")) {
+            return body;
+        }
+        StringBuffer result = new StringBuffer();
+        Pattern pattern = Pattern.compile("(?<=\\()(.*?)(?=\\))");
+        Matcher matcher = pattern.matcher(body);
+        while (matcher.find()) {
+            matcher.appendReplacement(result, getElementResponse(context, matcher.group()));
+        }
+        matcher.appendTail(result);
+        return result.toString().replaceAll("[\\(\\)]", "");
     }
 
 }

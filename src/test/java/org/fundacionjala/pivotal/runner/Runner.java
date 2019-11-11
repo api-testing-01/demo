@@ -20,12 +20,6 @@ import org.fundacionjala.pivotal.RequestSpecFactory;
 )
 public class Runner extends AbstractTestNGCucumberTests {
 
-    @Override
-    @DataProvider(parallel = true)
-    public Object[][] scenarios() {
-        return super.scenarios();
-    }
-
     @BeforeTest
     public void beforeAllScenarios() {
 
@@ -39,6 +33,15 @@ public class Runner extends AbstractTestNGCucumberTests {
             RequestManager.delete(requestSpec, String.format("/projects/%d", id));
         }
         // Restore flag by default
+
+        // data re-used in several scenarios
+        // initial data
+    }
+
+    @Override
+    @DataProvider(parallel = true)
+    public Object[][] scenarios() {
+        return super.scenarios();
     }
 
     @AfterTest
