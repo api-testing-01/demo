@@ -19,4 +19,11 @@ public class RequestSteps {
         RequestSpecification requestSpecification = RequestSpecFactory.getRequestSpec(serviceName, accountName);
         context.set("REQUEST_SPEC", requestSpecification);
     }
+
+    // Rosario Falconi
+    @And("I validate the response contains {string} is not null")
+    public void iValidateTheResponseContainsIsNotNull(final String attribute) {
+        String actualProjectId = response.jsonPath().getString(attribute);
+        Assert.assertNotNull(actualProjectId);
+    }
 }
