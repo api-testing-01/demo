@@ -19,4 +19,10 @@ public class RequestSteps {
         RequestSpecification requestSpecification = RequestSpecFactory.getRequestSpec(serviceName, accountName);
         context.set("REQUEST_SPEC", requestSpecification);
     }
+
+    @When("I send a GET request to {string}")
+    public void iSendAGETRequestTo(final String endpoint) {
+        response = RequestManager.get(RequestSpecFactory.getRequestSpec("pivotal"),
+                EndpointHelper.buildEndpoint(context, endpoint));
+    }
 }
