@@ -1,4 +1,4 @@
-package org.fundacionjala.pivotal.runner;
+package org.example.pivotal.runner;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 
-import org.fundacionjala.core.api.RequestManager;
-import org.fundacionjala.pivotal.RequestSpecFactory;
+import org.example.core.api.RequestManager;
+import org.example.pivotal.RequestSpecFactory;
 
 @CucumberOptions(
-        glue = {"org.fundacionjala"},
+        glue = {"org.example"},
         features = "src/test/resources/features",
         plugin = "pretty"
 )

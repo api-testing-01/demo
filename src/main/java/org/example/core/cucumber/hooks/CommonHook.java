@@ -1,12 +1,12 @@
-package org.fundacionjala.core.cucumber.hooks;
+package org.example.core.cucumber.hooks;
 
 import java.util.List;
 
 import io.cucumber.java.After;
 import io.restassured.specification.RequestSpecification;
 
-import org.fundacionjala.core.api.RequestManager;
-import org.fundacionjala.core.ScenarioContext;
+import org.example.core.ScenarioContext;
+import org.example.core.api.RequestManager;
 
 public class CommonHook {
 

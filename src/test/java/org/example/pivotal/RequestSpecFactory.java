@@ -1,4 +1,4 @@
-package org.fundacionjala.pivotal;
+package org.example.pivotal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import org.fundacionjala.core.Environment;
+import org.example.core.Environment;
 
 public final class RequestSpecFactory {
 
@@ -23,11 +23,7 @@ public final class RequestSpecFactory {
                 .setBaseUri(ENV.getValue("pivotal.baseUri"))
                 .addHeader("X-TrackerToken", ENV.getValue(String.format("pivotal.credentials.%s.token", account)))
                 .build();
-        return requestSpecification
-                .log().method()
-                .log().uri()
-                .log().params()
-                .log().body();
+        return getRequestWithLogger(requestSpecification);
     }
 
     private static RequestSpecification getRequestSpecTrello(final String account) {
@@ -36,11 +32,7 @@ public final class RequestSpecFactory {
                 .addQueryParam("key", ENV.getValue(String.format("trello.credentials.%s.key", account)))
                 .addQueryParam("token", ENV.getValue(String.format("trello.credentials.%s.token", account)))
                 .build();
-        return requestSpecification
-                .log().method()
-                .log().uri()
-                .log().params()
-                .log().body();
+        return getRequestWithLogger(requestSpecification);
     }
 
     private static RequestSpecification getRequestSpecSFDC(final String account) {
@@ -58,6 +50,10 @@ public final class RequestSpecFactory {
                 .setBaseUri(response.jsonPath().getString("instance_url").concat("/services/data/v39.0"))
                 .addHeader("Authorization", "Bearer " + response.jsonPath().getString("access_token"))
                 .build();
+        return getRequestWithLogger(requestSpecification);
+    }
+
+    private static RequestSpecification getRequestWithLogger(final RequestSpecification requestSpecification) {
         return requestSpecification
                 .log().method()
                 .log().uri()
@@ -66,7 +62,7 @@ public final class RequestSpecFactory {
     }
 
     private static Map<String, Supplier<RequestSpecification>> getRequestSpecMap(final String account) {
-    Map<String, Supplier<RequestSpecification>> requestSpecMap = new HashMap<>();
+        Map<String, Supplier<RequestSpecification>> requestSpecMap = new HashMap<>();
         requestSpecMap.put("pivotal", () -> getRequestSpecPivotal(account));
         requestSpecMap.put("trello", () -> getRequestSpecTrello(account));
         requestSpecMap.put("sfdc", () -> getRequestSpecSFDC(account));

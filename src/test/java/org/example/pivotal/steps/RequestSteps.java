@@ -1,10 +1,10 @@
-package org.fundacionjala.pivotal.steps;
+package org.example.pivotal.steps;
 
 import io.cucumber.java.en.Given;
 import io.restassured.specification.RequestSpecification;
 
-import org.fundacionjala.core.ScenarioContext;
-import org.fundacionjala.pivotal.RequestSpecFactory;
+import org.example.core.ScenarioContext;
+import org.example.pivotal.RequestSpecFactory;
 
 public class RequestSteps {
 

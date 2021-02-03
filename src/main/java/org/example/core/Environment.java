@@ -1,4 +1,4 @@
-package org.fundacionjala.core;
+package org.example.core;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -6,9 +6,9 @@ import org.json.simple.JSONObject;
 
 public final class Environment {
 
-    private static Environment instance = new Environment();
+    private static final Environment INSTANCE = new Environment();
 
-    private DocumentContext jsonContext;
+    private final DocumentContext jsonContext;
 
     private Environment() {
         String configJsonPath = "config.json";
@@ -17,7 +17,7 @@ public final class Environment {
     }
 
     public static Environment getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public String getValue(final String keyJsonPath) {

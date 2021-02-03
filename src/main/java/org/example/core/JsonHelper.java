@@ -1,4 +1,4 @@
-package org.fundacionjala.core;
+package org.example.core;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,13 +16,13 @@ public final class JsonHelper {
     }
 
     public static JSONObject getJsonObject(final String configJsonPath) {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         JSONParser parser = new JSONParser();
         try (InputStream inputStream = new FileInputStream(configJsonPath)) {
             Reader fileReader = new InputStreamReader(inputStream);
             jsonObject = (JSONObject) parser.parse(fileReader);
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException();
         }
         return jsonObject;
     }

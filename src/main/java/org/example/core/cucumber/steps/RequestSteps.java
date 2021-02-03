@@ -1,4 +1,4 @@
-package org.fundacionjala.core.cucumber.steps;
+package org.example.core.cucumber.steps;
 
 import java.util.Map;
 
@@ -11,10 +11,10 @@ import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 
-import org.fundacionjala.core.JsonHelper;
-import org.fundacionjala.core.ScenarioContext;
-import org.fundacionjala.core.api.DynamicIdHelper;
-import org.fundacionjala.core.api.RequestManager;
+import org.example.core.JsonHelper;
+import org.example.core.ScenarioContext;
+import org.example.core.api.DynamicIdHelper;
+import org.example.core.api.RequestManager;
 
 public class RequestSteps {
 

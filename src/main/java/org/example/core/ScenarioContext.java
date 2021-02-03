@@ -1,4 +1,4 @@
-package org.fundacionjala.core;
+package org.example.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class ScenarioContext {
 
-    private Map<String, Object> map;
-    private List<String> endpoints;
+    private final Map<String, Object> map;
+    private final List<String> endpoints;
 
     public ScenarioContext() {
         map = new HashMap<>();

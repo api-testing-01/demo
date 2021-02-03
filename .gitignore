@@ -4,7 +4,8 @@
 /out/
 *.iml
 /java/
-config.json
+/target/
 /gradle/
 gradlew
 gradlew.bat
+config.json

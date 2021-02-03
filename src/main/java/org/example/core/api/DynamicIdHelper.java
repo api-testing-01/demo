@@ -1,11 +1,11 @@
-package org.fundacionjala.core.api;
+package org.example.core.api;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.restassured.response.Response;
 
-import org.fundacionjala.core.ScenarioContext;
+import org.example.core.ScenarioContext;
 
 public final class DynamicIdHelper {
 
