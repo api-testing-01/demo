@@ -10,8 +10,7 @@ before_script:
 addons:
   sonarcloud:
     organization: api-testing-01
-    token:
-      secure: "$SONAR_TOKEN"
+    token: "$SONAR_TOKEN"
 script:
 - gradle compileJava compileTestJava
 - sonar-scanner
