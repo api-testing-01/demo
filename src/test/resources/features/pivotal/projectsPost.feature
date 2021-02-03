@@ -3,7 +3,7 @@ Feature: Projects
   @cleanData
   Scenario: POST Project
     Given I use the "pivotal" service and the "owner" account
-    When I send a "POST" request to "/projects" with json body
+    When I send a POST request to "/projects" with json body
     """
     {
     "name": "Project updated by cucumber",

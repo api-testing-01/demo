@@ -2,10 +2,12 @@ package org.example.core.cucumber.steps;
 
 import java.util.Map;
 
+import io.cucumber.java.ParameterType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
@@ -15,8 +17,12 @@ import org.example.core.JsonHelper;
 import org.example.core.ScenarioContext;
 import org.example.core.api.DynamicIdHelper;
 import org.example.core.api.RequestManager;
+import org.example.core.cucumber.hooks.CommonHook;
 
 public class RequestSteps {
+
+    private static final String KEY_LAST_ENDPOINT = "LAST_ENDPOINT";
+    private static final String KEY_LAST_RESPONSE = "LAST_RESPONSE";
 
     private Response response;
     private ScenarioContext context;
@@ -25,45 +31,50 @@ public class RequestSteps {
         this.context = context;
     }
 
-    @Given("I send a {string} request to {string} with json body")
-    public void iSendARequestToWithJsonBody(final String httpMethod, final String endpoint,
-                                            final String jsonBody) {
-        RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
-        String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
-        response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint,
-                DynamicIdHelper.replaceIds(context, jsonBody));
-        context.set("LAST_ENDPOINT", builtEndpoint);
-        context.set("LAST_RESPONSE", response);
+    @ParameterType("POST|PUT|PATCH|GET|DELETE")
+    public Method method(final String method) {
+        return Method.valueOf(method.toUpperCase());
     }
 
-    @Given("I send a {string} request to {string} with json file {string}")
-    public void iSendARequestToWithJsonFile(final String httpMethod, final String endpoint,
+    @Given("I send a {method} request to {string} with json body")
+    public void iSendARequestToWithJsonBody(final Method method, final String endpoint,
+                                            final String jsonBody) {
+        RequestSpecification requestSpecification = (RequestSpecification) context.get(CommonHook.CONTEXT_REQUEST_SPEC);
+        String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
+        response = RequestManager.doRequest(method, requestSpecification, builtEndpoint,
+                DynamicIdHelper.replaceIds(context, jsonBody));
+        context.set(KEY_LAST_ENDPOINT, builtEndpoint);
+        context.set(KEY_LAST_RESPONSE, response);
+    }
+
+    @Given("I send a {method} request to {string} with json file {string}")
+    public void iSendARequestToWithJsonFile(final Method method, final String endpoint,
                                             final String jsonPath) {
-        RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
+        RequestSpecification requestSpecification = (RequestSpecification) context.get(CommonHook.CONTEXT_REQUEST_SPEC);
         JSONObject jsonBody = JsonHelper.getJsonObject("src/test/resources/".concat(jsonPath));
         String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
-        response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint,
+        response = RequestManager.doRequest(method, requestSpecification, builtEndpoint,
                 DynamicIdHelper.replaceIds(context, jsonBody.toJSONString()));
-        context.set("LAST_ENDPOINT", builtEndpoint);
-        context.set("LAST_RESPONSE", response);
+        context.set(KEY_LAST_ENDPOINT, builtEndpoint);
+        context.set(KEY_LAST_RESPONSE, response);
     }
 
-    @Given("I send a {string} request to {string} with datatable")
-    public void iSendARequestTo(final String httpMethod, final String endpoint, final Map<String, String> body) {
-        RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
+    @Given("I send a {method} request to {string} with datatable")
+    public void iSendARequestTo(final Method method, final String endpoint, final Map<String, String> body) {
+        RequestSpecification requestSpecification = (RequestSpecification) context.get(CommonHook.CONTEXT_REQUEST_SPEC);
         String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
-        response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint, body);
-        context.set("LAST_ENDPOINT", builtEndpoint);
-        context.set("LAST_RESPONSE", response);
+        response = RequestManager.doRequest(method, requestSpecification, builtEndpoint, body);
+        context.set(KEY_LAST_ENDPOINT, builtEndpoint);
+        context.set(KEY_LAST_RESPONSE, response);
     }
 
-    @When("I send a {string} request to {string}")
-    public void iSendARequestTo(final String httpMethod, final String endpoint) {
-        RequestSpecification requestSpecification = (RequestSpecification) context.get("REQUEST_SPEC");
+    @When("I send a {method} request to {string}")
+    public void iSendARequestTo(final Method method, final String endpoint) {
+        RequestSpecification requestSpecification = (RequestSpecification) context.get(CommonHook.CONTEXT_REQUEST_SPEC);
         String builtEndpoint = DynamicIdHelper.buildEndpoint(context, endpoint);
-        response = RequestManager.doRequest(httpMethod, requestSpecification, builtEndpoint);
-        context.set("LAST_ENDPOINT", builtEndpoint);
-        context.set("LAST_RESPONSE", response);
+        response = RequestManager.doRequest(method, requestSpecification, builtEndpoint);
+        context.set(KEY_LAST_ENDPOINT, builtEndpoint);
+        context.set(KEY_LAST_RESPONSE, response);
     }
 
     @Then("I validate the response has status code {int}")
@@ -85,8 +96,8 @@ public class RequestSteps {
 
     @And("I save the request endpoint for deleting")
     public void iSaveTheRequestEndpointForDeleting() {
-        String lastEndpoint = (String) context.get("LAST_ENDPOINT");
-        String lastResponseId = ((Response) context.get("LAST_RESPONSE")).jsonPath().getString("id");
+        String lastEndpoint = (String) context.get(KEY_LAST_ENDPOINT);
+        String lastResponseId = ((Response) context.get(KEY_LAST_RESPONSE)).jsonPath().getString("id");
         String finalEndpoint = String.format("%s/%s", lastEndpoint, lastResponseId);
         context.addEndpoint(finalEndpoint);
     }

@@ -2,7 +2,7 @@ Feature: Workspaces
 
   Background:
     Given I use the "pivotal" service and the "owner" account
-    And I send a "POST" request to "/projects" with json body
+    And I send a POST request to "/projects" with json body
     """
     {
     "name": "Project created by cucumber",
@@ -14,7 +14,7 @@ Feature: Workspaces
 
   @cleanData
   Scenario: POST Workspace
-    When I send a "POST" request to "/my/workspaces" with json body
+    When I send a POST request to "/my/workspaces" with json body
     """
     {
     "name": "Workspace",

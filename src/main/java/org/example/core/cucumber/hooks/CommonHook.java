@@ -10,6 +10,8 @@ import org.example.core.api.RequestManager;
 
 public class CommonHook {
 
+    public static final String CONTEXT_REQUEST_SPEC = "REQUEST_SPEC";
+
     private ScenarioContext context;
 
     public CommonHook(final ScenarioContext context) {
@@ -18,7 +20,7 @@ public class CommonHook {
 
     @After(value = "@cleanData")
     public void afterScenario() {
-        RequestSpecification requestSpec = (RequestSpecification) context.get("REQUEST_SPEC");
+        RequestSpecification requestSpec = (RequestSpecification) context.get(CONTEXT_REQUEST_SPEC);
         List<String> endpoints = context.getEndpoints();
         for (String endpoint : endpoints) {
             RequestManager.delete(requestSpec, endpoint);

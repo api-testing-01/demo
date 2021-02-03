@@ -2,7 +2,7 @@ Feature: Projects
 
   Background:
     Given I use the "pivotal" service and the "owner" account
-    And I send a "POST" request to "/projects" with json body
+    And I send a POST request to "/projects" with json body
     """
     {
     "name": "Project2 created by cucumber",
@@ -16,7 +16,7 @@ Feature: Projects
 
   @cleanData
   Scenario Outline: PUT Project
-    When I send a "PUT" request to "/projects/{P.id}" with json body
+    When I send a PUT request to "/projects/{P.id}" with json body
     """
     {
     "name": "Project2 updated by cucumber",

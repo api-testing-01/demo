@@ -2,7 +2,7 @@ Feature: Stories
 
   Background:
     Given I use the "pivotal" service and the "owner" account
-    And I send a "POST" request to "/projects" with json body
+    And I send a POST request to "/projects" with json body
     """
     {
     "name": "Project created by cucumber",
@@ -11,7 +11,7 @@ Feature: Stories
     """
     And I save the response as "P"
     And I save the request endpoint for deleting
-    And I send a "POST" request to "/projects/{P.id}/stories" with json body
+    And I send a POST request to "/projects/{P.id}/stories" with json body
     """
     {
     "name": "Story created by cucumber"
@@ -21,7 +21,7 @@ Feature: Stories
 
   @cleanData
   Scenario: PUT Story
-    When I send a "PUT" request to "/projects/{P.id}/stories/{S.id}" with json body
+    When I send a PUT request to "/projects/{P.id}/stories/{S.id}" with json body
     """
     {
     "name": "Story updated by cucumber"

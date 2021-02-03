@@ -4,6 +4,7 @@ import java.util.Map;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -12,29 +13,29 @@ public final class RequestManager {
     private RequestManager() {
     }
 
-    public static Response doRequest(final String httpMethod, final RequestSpecification requestSpecification,
+    public static Response doRequest(final Method httpMethod, final RequestSpecification requestSpecification,
                                      final String endpoint, final String jsonBody) {
-        if ("POST".equalsIgnoreCase(httpMethod)) {
+        if (Method.POST.equals(httpMethod)) {
             return post(requestSpecification, endpoint, jsonBody);
-        } else if ("PUT".equalsIgnoreCase(httpMethod)) {
+        } else if (Method.PUT.equals(httpMethod)) {
             return put(requestSpecification, endpoint, jsonBody);
         }
         return patch(requestSpecification, endpoint, jsonBody);
     }
 
-    public static Response doRequest(final String httpMethod, final RequestSpecification requestSpecification,
+    public static Response doRequest(final Method httpMethod, final RequestSpecification requestSpecification,
                                      final String endpoint, final Map<String, String> body) {
-        if ("POST".equalsIgnoreCase(httpMethod)) {
+        if (Method.POST.equals(httpMethod)) {
             return post(requestSpecification, endpoint, body);
-        } else if ("PUT".equalsIgnoreCase(httpMethod)) {
+        } else if (Method.PUT.equals(httpMethod)) {
             return put(requestSpecification, endpoint, body);
         }
         return patch(requestSpecification, endpoint, body);
     }
 
-    public static Response doRequest(final String httpMethod, final RequestSpecification requestSpecification,
+    public static Response doRequest(final Method httpMethod, final RequestSpecification requestSpecification,
                                      final String endpoint) {
-        if ("GET".equalsIgnoreCase(httpMethod)) {
+        if (Method.GET.equals(httpMethod)) {
             return get(requestSpecification, endpoint);
         }
         return delete(requestSpecification, endpoint);

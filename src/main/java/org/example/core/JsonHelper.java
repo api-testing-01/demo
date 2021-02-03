@@ -12,6 +12,9 @@ import org.json.simple.parser.ParseException;
 
 public final class JsonHelper {
 
+    public static final String MSG_NOT_POSSIBLE_TO_READ_JSON =
+            "Not possible to read json file";
+
     private JsonHelper() {
     }
 
@@ -22,7 +25,7 @@ public final class JsonHelper {
             Reader fileReader = new InputStreamReader(inputStream);
             jsonObject = (JSONObject) parser.parse(fileReader);
         } catch (IOException | ParseException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(MSG_NOT_POSSIBLE_TO_READ_JSON);
         }
         return jsonObject;
     }
