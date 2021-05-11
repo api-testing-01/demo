@@ -5,7 +5,4 @@
 *.iml
 /java/
 /target/
-/gradle/
-gradlew
-gradlew.bat
 config.json
