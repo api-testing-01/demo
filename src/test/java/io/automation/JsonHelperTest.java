@@ -1,4 +1,4 @@
-package org.example.core;
+package io.automation;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Assert;

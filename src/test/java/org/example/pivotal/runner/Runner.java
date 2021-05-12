@@ -10,11 +10,11 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 
-import org.example.core.api.RequestManager;
+import io.automation.service.RequestManager;
 import org.example.pivotal.RequestSpecFactory;
 
 @CucumberOptions(
-        glue = {"org.example"},
+        glue = {"org.example", "io.automation"},
         features = "src/test/resources/features",
         plugin = "pretty"
 )

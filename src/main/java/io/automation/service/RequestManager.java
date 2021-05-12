@@ -1,4 +1,4 @@
-package org.example.core.api;
+package io.automation.service;
 
 import java.util.Map;
 

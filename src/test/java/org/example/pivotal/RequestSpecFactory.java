@@ -9,7 +9,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-import org.example.core.Environment;
+import io.automation.Environment;
 
 public final class RequestSpecFactory {
 

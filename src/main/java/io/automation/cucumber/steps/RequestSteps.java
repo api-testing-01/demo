@@ -1,4 +1,4 @@
-package org.example.core.cucumber.steps;
+package io.automation.cucumber.steps;
 
 import java.util.Map;
 
@@ -13,11 +13,11 @@ import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 
-import org.example.core.JsonHelper;
-import org.example.core.ScenarioContext;
-import org.example.core.api.DynamicIdHelper;
-import org.example.core.api.RequestManager;
-import org.example.core.cucumber.hooks.CommonHook;
+import io.automation.JsonHelper;
+import io.automation.ScenarioContext;
+import io.automation.cucumber.hooks.CommonHook;
+import io.automation.service.DynamicIdHelper;
+import io.automation.service.RequestManager;
 
 public class RequestSteps {
 

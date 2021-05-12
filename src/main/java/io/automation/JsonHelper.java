@@ -1,4 +1,4 @@
-package org.example.core;
+package io.automation;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.example.core;
+package io.automation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

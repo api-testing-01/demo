@@ -3,7 +3,7 @@ package org.example.pivotal.steps;
 import io.cucumber.java.en.Given;
 import io.restassured.specification.RequestSpecification;
 
-import org.example.core.ScenarioContext;
+import io.automation.ScenarioContext;
 import org.example.pivotal.RequestSpecFactory;
 
 public class RequestSteps {

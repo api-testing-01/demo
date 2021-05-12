@@ -1,12 +1,12 @@
-package org.example.core.cucumber.hooks;
+package io.automation.cucumber.hooks;
 
 import java.util.List;
 
 import io.cucumber.java.After;
 import io.restassured.specification.RequestSpecification;
 
-import org.example.core.ScenarioContext;
-import org.example.core.api.RequestManager;
+import io.automation.ScenarioContext;
+import io.automation.service.RequestManager;
 
 public class CommonHook {
 

@@ -1,11 +1,11 @@
-package org.example.core.api;
+package io.automation.service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.restassured.response.Response;
 
-import org.example.core.ScenarioContext;
+import io.automation.ScenarioContext;
 
 public final class DynamicIdHelper {
 
